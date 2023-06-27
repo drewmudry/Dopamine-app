@@ -8,24 +8,39 @@
 import SwiftUI
 import RealityKit
 import RealityKitContent
+import AVKit
 
 struct ContentView: View {
+    @State var player = AVPlayer(url: Bundle.main.url(forResource: "gameplay", withExtension: "mp4")!)
+        @State var isPlaying: Bool = false
+
+    
     var body: some View {
         NavigationSplitView {
             List {
-                Text("Item")
+                Image("ic_home_selected")
+
             }
-            .navigationTitle("Sidebar")
+            .navigationSplitViewColumnWidth(70)
+            .navigationTitle("g")
         } detail: {
             VStack {
-                Model3D(named: "Scene", bundle: realityKitContentBundle)
-                    .padding(.bottom, 50)
-
-                Text("Hello, world!")
+                VideoPlayer(player: player)
+                    .frame(width: 406, height: 720, alignment: .center)
+                
+                Button {
+                    isPlaying ? player.pause() : player.play()
+                        //player.isMuted=true
+                        
+                    isPlaying.toggle()
+                    player.seek(to: .zero)
+                    //player.volume=0.0
+                } label: {
+                    Image(systemName: isPlaying ? "stop" : "play")
+                        .padding()
+                }
             }
-            .navigationTitle("Content")
-            .padding()
-        }
+        } .frame(width:406)
     }
 }
 
